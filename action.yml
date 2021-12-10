@@ -1,6 +1,15 @@
 name: 'Git-Test Setup'
 author: '@awseward'
 description: Set up https://github.com/mhagger/git-test for use in a GitHub Action
+
+inputs:
+  git_test_dir:
+    description: |
+      Where to clone `git-test` (relative to $GITHUB_WORKSPACE).
+      The `git-test` binary will then be located at `$git_test_dir/bin/git-test`
+    required: false
+    default: .git-test
+
 runs:
   using: composite
   steps:
@@ -10,9 +19,9 @@ runs:
       with:
         repository: mhagger/git-test
         # TODO: Probably parameterize this if we can
-        path: .git-test
+        path: ${{ inputs.git_test_dir }}
 
-    - run: echo "PATH=${PATH}:$(pwd)/.git-test/bin" >> "${GITHUB_ENV}"
+    - run: echo "PATH=${PATH}:${GITHUB_WORKSPACE}/${{ inputs.git_test_dir }}/bin" >> "${GITHUB_ENV}" && echo "${PATH}"
       shell: bash
 
     # TODO: Parameterize this
