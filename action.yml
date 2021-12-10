@@ -3,12 +3,29 @@ author: '@awseward'
 description: Set up https://github.com/mhagger/git-test for use in a GitHub Action
 
 inputs:
+  git_config_user_email:
+    description: Email to configure for the local git repo's user
+    required: false
+    default: git-test.user@example.com
+
+  git_config_user_name:
+    description: Name to configure for the local git repo's user
+    required: false
+    default: Git-Test User
+
   git_test_dir:
-    description: |
-      Where to clone `git-test` (relative to $GITHUB_WORKSPACE).
-      The `git-test` binary will then be located at `$git_test_dir/bin/git-test`
+    description: Where to clone `git-test` (relative to $GITHUB_WORKSPACE).
     required: false
     default: .git-test
+
+  test_name:
+    description: Name of the git-test test to add
+    required: false
+    default: default
+
+  test_command:
+    description: Command to set as the git-test when adding it
+    required: true
 
 runs:
   using: composite
@@ -18,20 +35,16 @@ runs:
     - uses: actions/checkout@v2
       with:
         repository: mhagger/git-test
-        # TODO: Probably parameterize this if we can
         path: ${{ inputs.git_test_dir }}
 
-    - run: echo "PATH=${PATH}:${GITHUB_WORKSPACE}/${{ inputs.git_test_dir }}/bin" >> "${GITHUB_ENV}" && echo "${PATH}"
+    - run: echo "PATH=${PATH}:${GITHUB_WORKSPACE}/${{ inputs.git_test_dir }}/bin" >> "${GITHUB_ENV}"
       shell: bash
 
-    # TODO: Parameterize this
-    - run: git config --local user.email "git-test.user@example.com"
+    - run: git config --local user.email '${{ inputs.git_config_user_email }}'
       shell: bash
 
-    # TODO: Parameterize this
-    - run: git config --local user.name "Git-Test User"
+    - run: git config --local user.name '${{ inputs.git_config_user_name }}'
       shell: bash
 
-    # TODO: Parameterize this
-    - run: git test add './test.sh'
+    - run: git test add --test '${{ inputs.test_name }}' '${{ inputs.test_command }}'
       shell: bash
