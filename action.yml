@@ -46,5 +46,15 @@ runs:
     - run: git config --local user.name '${{ inputs.git_config_user_name }}'
       shell: bash
 
+    # It may be worth parameterizing the `force` part of this, depending on the
+    # workflow it might not be desired…
+    #
+    # Also, the `|| true` just lets us continue if there aren't any notes yet
+    # to fetch for the configured test, I'm not sure I love this but it's not
+    # clear yet whether it's truly a bad idea; again it sort of depends on what
+    # workflow is desired…
+    - run: git fetch --force origin 'refs/notes/tests/${{ inputs.test_name }}:refs/notes/tests/${{ inputs.test_name }}' || true
+      shell: bash
+
     - run: git test add --test '${{ inputs.test_name }}' '${{ inputs.test_command }}'
       shell: bash
