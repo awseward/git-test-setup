@@ -1,0 +1,28 @@
+name: 'Git-Test Setup'
+author: '@awseward'
+description: Set up https://github.com/mhagger/git-test for use in a GitHub Action
+runs:
+  using: composite
+  steps:
+    - uses: actions/checkout@v2
+
+    - uses: actions/checkout@v2
+      with:
+        repository: mhagger/git-test
+        # TODO: Probably parameterize this if we can
+        path: .git-test
+
+    - run: echo "PATH=${PATH}:$(pwd)/.git-test/bin" >> "${GITHUB_ENV}"
+      shell: bash
+
+    # TODO: Parameterize this
+    - run: git config --local user.email "git-test.user@example.com"
+      shell: bash
+
+    # TODO: Parameterize this
+    - run: git config --local user.name "Git-Test User"
+      shell: bash
+
+    # TODO: Parameterize this
+    - run: git test add './test.sh'
+      shell: bash
