@@ -35,7 +35,7 @@ runs:
         repository: mhagger/git-test
         path: ${{ inputs.git_test_dir }}
 
-    - run: echo "PATH=${PATH}:${GITHUB_WORKSPACE}/${{ inputs.git_test_dir }}/bin" >> "${GITHUB_ENV}"
+    - run: echo "${GITHUB_WORKSPACE}/${{ inputs.git_test_dir }}/bin" >> $GITHUB_PATH
       shell: bash
 
     - run: git config --local user.email '${{ inputs.git_config_user_email }}'
