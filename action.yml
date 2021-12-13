@@ -6,12 +6,12 @@ inputs:
   git_config_user_email:
     description: Email to configure for the local git repo's user
     required: false
-    default: git-test.user@example.com
+    default: github-actions@github.com
 
   git_config_user_name:
     description: Name to configure for the local git repo's user
     required: false
-    default: Git-Test User
+    default: github-actions
 
   git_test_dir:
     description: Where to clone `git-test` (relative to $GITHUB_WORKSPACE).
